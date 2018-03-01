@@ -194,7 +194,7 @@ hist(E,prob=TRUE,main = "kernel density estimation with theta=6")
 lines(density(E))
 
 g <-function(x,theta=6){
-  (1/(2*gamma(theta)+gamma(theta+0.5)))*(2*x^(theta-1)+x*(theta-0.5))*exp(-x)
+  (1/(2*gamma(theta)+gamma(theta+0.5)))*(2*x^(theta-1)+x^(theta-0.5))*exp(-x)
 }
 curve(g,from = 0,to=20,add=T,col="red")
 legend("topright", inset=.1, 
