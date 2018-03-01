@@ -1,0 +1,318 @@
+---
+title: "Homework 3"
+author: "Yue Gu & Chenyi Yu"
+date : "March 1, 2018"
+output: pdf_document
+---
+
+
+### Question 1
+# (a) 
+The log likelihood function is:
+\begin{align}
+l_n^c(\Psi) 
+&= \sum\limits_{i=1}^{n} \log p(y_i,\textbf{x}_i,z_i;\Psi) \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} z_{ij} 
+   \{\log \pi_j \phi(y_i - \textbf{x}_i^T\beta_j; 0,\sigma^2)\} \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} z_{ij} \{\log\pi_j +  
+   \log\phi(y_i - \textbf{x}_i^T\beta_j; 0,\sigma^2)\}
+\end{align}
+
+E-Step: 
+if we treat Z as a random variable and take the conditional expression of $l_n^c{(\Psi)}$, we get:
+\begin{align}
+Q(\Psi \,|\, \Psi^{(k)}) 
+&= E_z[l_n^c(\Psi)] \\
+&= E_z[\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} z_{ij} \{\log\pi_j^{(k)} +  
+   \log\phi(y_i - \textbf{x}_i^T{\beta_j}^{(k)};0,{\sigma^2}^{(k)}\}] \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} E[z_{ij} \,|\, y_i,\textbf{x}_i;\Psi^{(k)}] 
+   \{\log\pi_j^{(k)} + \log\phi(y_i-\textbf{x}_i^T{\beta_j}^{(k)};0,{\sigma^2}^{(k)} \}  \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+   \{\log\pi_j^{(k)} + \log\phi(y_i-\textbf{x}_i^T{\beta_j}^{(k)};0,{\sigma^2}^{(k)}\} \\
+\end{align}
+
+
+where
+\begin{align}
+p_{ij}^{(k+1)} 
+&= E[z_{ij} \,|\, y_i,\textbf{x}_i;\Psi^{(k)}] \\
+&= \cfrac {p(z_{ij};\pi)p(\textbf{x}_{i} \,|\, y_{i},z_{i};\Psi^{(k)})} 
+   {p(y_{i},\textbf{x}_{i};\Psi^{(k)})} \, By\ Bayes'\ Rule  \\
+&= \cfrac {\pi_j^{(k)} \phi(y_i-\textbf{x}_i^T\beta_j^{(k)};0,{\sigma^2}^{(k)})} 
+{\sum\limits_{j=1}^{m} \pi_j^{(k)} \phi(y_i-\textbf{x}_i^T\beta_j^{(k)};0,{\sigma^2}^{(k)})} \\
+\end{align}
+
+
+
+# (b) 
+M-Step: Maximize $Q(\Psi|\Psi^{(k)})$ to obtain $(\beta^{(k+1)},{\sigma^2}^{(k+1)})$
+
+\begin{align}
+Q(\Psi \,|\, \Psi^{(k)})
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} E[z_{ij} \,|\, y_i,\textbf{x}_i;\Psi^{(k)}] 
+   \{\log\pi_j^{(k)} + \log\phi(y_i-\textbf{x}_i^T\beta_j^{(k)};0,{\sigma^2}^{(k)})\} \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+   \{\log\pi_j^{(k)} + \log\phi(y_i-\textbf{x}_i^T\beta_j^{(k)};0,{\sigma^2}^{(k)})\} \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} \log\pi_j^{(k)} +
+   \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+   \log\phi(y_i-\textbf{x}_i^T\beta_j^{(k)};0,{\sigma^2}^{(k)}) \\
+&= \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} \log\pi_j^{(k)} +
+   \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+   \log(\frac {1} {\sqrt{2\pi} {\sigma}^{(k)}}) -
+   \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+   \frac {(y_i-\textbf{x}_i^T\beta_j^{(k)})^2} {2{\sigma^2}^{(k)}}
+\end{align}
+
+Let
+\begin{equation}
+A_1 = \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} \log\pi_j^{(k)}
+\end{equation}
+
+\begin{equation}
+A_2 = \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+      \log(\frac {1} {\sqrt{2\pi} {\sigma}^{(k)}})
+\end{equation}
+
+\begin{equation}
+A_3 = \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+      \frac {(y_i-\textbf{x}_i^T\beta_j^{(k)})^2} {2{\sigma^2}^{(k)}}
+\end{equation}
+
+Then we apply Lagrange equation with the constraint $\sum\limits_{j=1}^{m} \pi_j = 1$, we have
+\begin{equation}
+L({\pi_1}^{(k)},...,{\pi_m}^{(k)};\lambda) 
+= Q(\Psi \,|\, \Psi^{(k)}) - \lambda (\sum\limits_{j=1}^{m} {\pi_j}^{(k)}-1)
+\end{equation}
+
+By taking the derivative of L with repective to $\pi_j^{(k)}$ and set to zero, we obtain
+\begin{equation}
+\frac{\partial L}{\partial \pi_j^{(k)}} 
+= \sum\limits_{i=1}^{n} {p_{ij}}^{(k+1)} \frac {1} {\pi_j^{(k+1)}} - \lambda 
+= 0
+\end{equation}
+
+
+\begin{equation}
+\, \Rightarrow \,  
+\pi_j^{(k+1)} = \cfrac {\sum\limits_{i=1}^{n} p_{ij}^{(k+1)}} {n}  
+\end{equation}
+
+And
+\begin{equation}
+\frac {\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)}} {\lambda} 
+= \frac {n} {\lambda}
+=1
+\end{equation}
+
+\begin{equation}
+\, \Rightarrow \,  
+\lambda = n
+\end{equation}
+
+Therefore, we get 
+\begin{equation}
+\pi_j^{(k+1)} = \cfrac {\sum\limits_{i=1}^{n} p_{ij}^{(k+1)}} {n}  
+\end{equation}
+As required.
+
+
+By taking the derivative of $A_3$ with repective to $\beta_j^{(k)}$ and set to zero, we get
+\begin{equation}
+\frac{\partial A_3}{\partial \beta_j^{(k)}} 
+\propto \sum\limits_{i=1}^{n}  p_{ij}^{(k+1)} \textbf{x}_i
+        (y_i - \textbf{x}_i^T \beta_j^{(k+1)})
+= 0
+\end{equation}
+
+\begin{equation}
+\, \Rightarrow \, 
+\sum\limits_{i=1}^{n}  p_{ij}^{(k+1)} \textbf{x}_i y_i
+= \sum\limits_{i=1}^{n} \textbf{x}_i \textbf{x}_i^T \beta_j^{(k+1)} p_{ij}^{(k+1)}
+\end{equation}
+
+
+\begin{equation}
+\, \Rightarrow \, 
+\beta_j^{(k+1)} = 
+({\sum\limits_{i=1}^{n}}  \textbf{x}_i \textbf{x}_i^T p_{ij}^{(k+1)}) ^{-1}
+({\sum\limits_{i=1}^{n}} \textbf{x}_i p_{ij}^{(k+1)} y_i) , j=1,..., m  
+\end{equation}
+As required.
+
+
+By taking the derivative of $A_2+A_3$ with repective to ${\sigma^2}^{(k)}$ and set to zero, we get
+\begin{equation}
+{\sigma^2}^{(k+1)} 
+= \frac {\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} 
+  (y_i - \textbf{x}_i^T \beta_j^{(k+1)})^2} 
+  {\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)}}
+\end{equation}
+
+
+\begin{equation}
+\, \Rightarrow \,
+{\sigma^2}^{(k+1)} = 
+\cfrac{\sum\limits_{i=1}^{n} \sum\limits_{j=1}^{m} p_{ij}^{(k+1)} (y_i - \textbf{x}_i^T \beta_j^{(k+1)})^2} {n} 
+\end{equation}
+As required.
+
+
+
+### Question 2
+##(a) 
+When calculating the normalizing constant C, we can seperate the formula $g(x)\propto(2x^{\theta-1}+x^{\theta-1/2})e^{-x}$ into two Gamma distributions. 
+Then we can get $2C\Gamma(\theta)+C\Gamma(\theta+\frac{1}{2}=1)$.
+Thus $C=\frac{1}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}$
+$$g(x)=\frac{1}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}2x^{\theta-1}e^{-x}+\frac{1}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}2x^{\theta-1/2}e^{-x}$$
+$$=\frac{2\Gamma(\theta)}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}\cdot\frac{1}{\Gamma(\theta)}{x^{\theta-1}e^{-x}}+\frac{\Gamma(\theta+\frac{1}{2})}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}\cdot\frac{1}{\Gamma(\theta+\frac{1}{2})}{2x^{\theta-1/2}e^{-x}}$$
+$g$ is a mixture of Gamma($\theta$,1) and Gamma($\theta+\frac{1}{2}$,1) with the weights $\frac{2\Gamma(\theta)}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}$ and $\frac{\Gamma(\theta+\frac{1}{2})}{2\Gamma(\theta)+\Gamma(\theta+\frac{1}{2})}$ respectively. 
+
+##(b) 
+```{r}
+sample_g <- function(theta){
+  w <- 2*gamma(theta)/(2*gamma(theta)+gamma(theta+1/2))
+  m <- 10000
+  counts <- 0
+  draws <- c()
+  u <- runif(m,0,1)
+  for(i in 1:m){
+    if(u[i]<w){
+      x <- rgamma(1,theta,1)
+      counts <- counts+1
+      draws <- c(draws,x)
+    }
+    else{
+      x <- rgamma(1,theta+0.5,1)
+    counts <- counts+1
+    draws <- c(draws,x)  
+    }
+  }
+  return(draws)
+}
+E <- sample_g(6)
+hist(E,prob=TRUE,main = "kernel density estimation with theta=6")
+lines(density(E))
+
+g <-function(x,theta=6){
+  (1/(2*gamma(theta)+gamma(theta+0.5)))*(2*x^(theta-1)+x*(theta-0.5))*exp(-x)
+}
+curve(g,from = 0,to=20,add=T,col="red")
+legend("topright", inset=.1, 
+         legend = c("kernel density","true density"), 
+         bty = "n", lty = 1, lwd = 2, col = c("black", "red"))
+```
+
+
+###Question 3
+##(a)
+
+Because $x\in(0,1)$
+$$f\propto\frac{x^{\theta-1}}{1+x^2}+\sqrt{2+x^{2}}(1-x)^{\beta-1}\leq x^{\theta-1}+\sqrt{3}(1-x)^{\beta-1}$$
+$$C\int x^{\theta-1}+\sqrt{3}(1-x)^{\beta-1}dx=1$$
+$$C=\frac{1}{q/\theta+\sqrt{3}/\beta}$$
+$$g(x)=\frac{1/\theta}{1/\theta+\sqrt{3}/\beta}\theta x^{\theta-1}dx+\frac{\sqrt{3}/\beta}{1/\theta+\sqrt{3}/\beta}\beta(1-x)^{\beta-1}$$
+$$=\frac{1/\theta}{1/\theta+\sqrt{3}/\beta}\frac{x^{\theta-1}}{B(\theta-1)}+\frac{\sqrt{3}/\beta}{1/\theta+\sqrt{3}/\beta}\frac{(1-x)^{\beta-1}}{B(1,\beta)} $$
+So the instrumental distribution can be seperated into Beta($\theta$,1) and Beta(1,$\beta$) and the weights are $\frac{1/\theta}{1/\theta+\sqrt{3}/\beta}$ and $\frac{\sqrt{3}/\beta}{1/\theta+\sqrt{3}/\beta}$
+
+```{r}
+sample_f <- function(theta,beta){
+  f <- function(x){
+   x^(theta-1)/(1+x^2)+sqrt(2+x^2)*(1-x)^(beta-1)
+  }
+  g <- function(x){
+    x^(theta-1)+sqrt(3)*(1-x)^(beta-1)
+  }
+  w <- (1/theta)/(1/theta+sqrt(3)/beta)
+  m <- 10000
+  counts <- 0
+  draws <- c()
+while(counts<=m){
+    repeat{
+      u <- runif(1,0,1)
+      if (u<=w){
+        x <- rbeta(1,theta,1)}
+      else{
+        x <- rbeta(1,1,beta) }  
+      t <- u*g(x)
+      if(t<=f(x)){break}
+    }
+    counts <- counts+1
+    draws <- c(draws,x)
+}
+  return(draws)
+}
+E <- sample_f(3,4)
+hist(E,freq=F, xlab = "x, N=10000", ylab="density",main="estimated density of a random sample with theta=3,beta=4")
+lines(density(E))
+```
+
+
+
+##(b)
+For $0<x<1$
+$$f_{1}(x)\propto\frac{x^{\theta-1}}{1+x^{2}}\leq x^{\theta-1}=g_1(x)$$
+$$f_{2}(x)=\sqrt{2+x^{2}}(1-x)^{\beta-1}\leq \sqrt{3}(1-x)^{\beta-1}=g_{2}(x)$$
+Set $C_{1}$ and $C_{2}$ as the normalizing constant for $g_{1}(x)$ and $g_{2}(x)$ respectively. 
+$C_{1}\int_{0}^{1}g_{1}(x)=1$ and $C_{2}\int_{0}^{1}g_{2}(x)=1$
+$$C_{1}\int_{0}^{1}x^{\theta-1}dx=\frac{C_{1}}{\theta}$$
+$$C_{1}=\theta$$
+$$C_{2}\int_{0}^{1}\sqrt{3}(1-x)^{\beta-1}dx=\frac{C_{2}\sqrt{3}}{\beta}=1$$
+$$C_{2}=\frac{\beta}{\sqrt{3}}$$
+The weight $w_{1}=\frac{1/C_{1}}{1/C_{1}+1/C{2}}=\frac{C_{2}}{C_{1}+C_{2}}=\frac{1/\theta}{1/\theta+\sqrt{3}/\beta}$ and $w_{2}=\frac{1/C_{2}}{1/C_{1}+1/C_{2}}=\frac{C_{1}}{C_{1}+C_{2}}=\frac{\sqrt{3}/\beta}{1/\theta+\sqrt{3}/\theta}$
+
+```{r}
+sample2_f <- function(theta,beta){
+  f1 <- function(x){
+   x^(theta-1)/(1+x^2)
+  }
+  f2 <- function(x){
+    sqrt(2+x^2)*(1-x)^(beta-1)
+  }
+  g1<- function(x){
+    x^(theta-1)
+  }
+  g2 <- function(x){
+    sqrt(3)*(1-x)^(beta-1)
+  }
+  w <- (1/theta)/(1/theta+sqrt(3)/beta)
+  m <- 10000
+  counts <- 0
+  draws <- c()
+  x <- 0
+while(counts<=m){
+    flag <- TRUE  
+    while(flag){
+      u <- runif(1,0,1)
+      if (u<=w){
+        x <- rbeta(1,theta,1)}
+        t <- u* g1(x)
+        if(t<=f1(x)){
+          flag <- FALSE
+        }
+      else{
+        x <- rbeta(1,1,beta)
+        t <- u* g2(x)
+        if (t<=f2(x)){
+          flag <- FALSE
+        }
+        }  
+    }
+    counts <- counts+1
+    draws <- c(draws,x)
+}
+  return(draws)
+}
+E <- sample2_f(3,4)
+hist(E,probability = TRUE,main = "estimated density of a random sample with theta=3,beta=4")
+lines(density(E))
+```
+
+
+
+
+
+
+
+
+
+
